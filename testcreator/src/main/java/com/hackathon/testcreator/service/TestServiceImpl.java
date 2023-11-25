@@ -16,13 +16,14 @@ public class TestServiceImpl implements TestService{
   @Override
   public String getTest(String language, String version) {
       String url = "https://api.openai.com/v1/chat/completions";
-      String apiKey = "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";
+      String apiKey = "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";
       String model = "gpt-3.5-turbo";
 
       String message = "create me only one senior code challenge algorithm in "
           + language + " " + version
           + " with a story prompt of 50 words contextualizing the test and 80% parts "
-          + " in blank to be filled by the user and without the main.";
+          + " in blank to be filled by the user and without the main "
+          + " and separate the story and the code challenge into json levels in the response";
       StringBuffer response = new StringBuffer();
 
       try {
