@@ -26,10 +26,11 @@ public class TestcreatorController {
   public ResponseEntity<String> createTest(
       @RequestParam String language,
       @RequestParam String version,
-      @RequestParam String apiKey) {
-    if(!language.isEmpty() && !version.isEmpty()) {
-      LOGGER.info("Requesting a test for {} , version {}",language,version);
-      String response = service.getTest(language, version, apiKey);
+      @RequestParam String apiKey,
+      @RequestParam String seniority) {
+    if(!language.isEmpty() && !version.isEmpty() && !apiKey.isEmpty() && !seniority.isEmpty()) {
+      LOGGER.info("Requesting a test for {} , version {}, seniority {} ",language,version, seniority);
+      String response = service.getTest(language, version, apiKey, seniority);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     LOGGER.info("Something went wrong");
