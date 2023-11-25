@@ -2,6 +2,8 @@ package com.hackathon.testcreator.service;
 
 public interface TestService {
 
-  String getTest(String language, String version, String apiKey_, String seniority);
+  String getChatGPT(String language, String version, String apiKey_, String seniority);
+
+  //BardAnswer getBard(String language, String version, String seniority);
 
 }

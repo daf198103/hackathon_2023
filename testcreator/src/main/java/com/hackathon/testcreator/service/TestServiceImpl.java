@@ -2,12 +2,14 @@ package com.hackathon.testcreator.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
 import java.net.URL;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class TestServiceImpl implements TestService{
 
   @Override
-  public String getTest(String language, String version, String apiKey_, String seniority) {
+  public String getChatGPT(String language, String version, String apiKey_, String seniority) {
       String url = "https://api.openai.com/v1/chat/completions";
       String apiKey = apiKey_;
       String model = "gpt-3.5-turbo";
@@ -25,7 +27,9 @@ public class TestServiceImpl implements TestService{
           + language + " " + version
           + " with a story prompt of 50 words contextualizing the test and 80% parts "
           + " in blank to be filled by the user and without the main "
-          + " and separate the story and the code challenge into distinct paragraphs in the response";
+          + " and separate the story the code challenge  and the instructions"
+          + " into distinct paragraphs in the response";
+
       StringBuffer response = new StringBuffer();
 
       try {
@@ -58,6 +62,41 @@ public class TestServiceImpl implements TestService{
       //return response.toString();
     return extractMessage(response.toString());
   }
+
+//  @Override
+//  public BardAnswer getBard(String language, String version, String seniority) {
+//
+////    String message = "create me only one " + seniority +" code challenge algorithm in "
+////        + language + " " + version
+////        + " with a story prompt of 50 words contextualizing the test and 80% parts "
+////        + " in blank to be filled by the user and without the main "
+////        + " and separate the story and the code challenge into distinct paragraphs in the response";
+//
+////    String token = "dQj5qAlvj5TuHL6w3AE_BK-vn1jJfDPe_JcbesIPRrEiAbgWJvBBb86l2mMGsBwWhcp5Xw";
+////    AIClient client = new GoogleBardClient(token, Duration.ofMinutes(10));
+////
+////    Answer answer = client.ask("create me only one mid code challenge algorithm in Java 17 with a story prompt of 50 words contextualizing the test and 80% parts in blank to be filled by the user and without the main and separate the story and the code challenge into distinct paragraphs in the response\n");
+////
+////    return new BardAnswer(answer.chosenAnswer(), answer.draftAnswers());
+//
+//    HashMap<String, String> headers = new HashMap<>();
+//    headers.put("x-goog-api-key", System.getEnv("PALM_API_KEY"));
+//
+//    InstantiatingGrpcChannelProvider provider = InstantiatingGrpcChannelProvider.newBuilder()
+//        .setHeaderProvider(FixedHeaderProvider.create(headers))
+//        .build();
+//
+//    DiscussServiceSettings settings = DiscussServiceSettings.newBuilder()
+//        .setTransportChannelProvider(provider)
+//        .setCredentialsProvider(FixedCredentialsProvider.create(null))
+//        .build();
+//
+//    DiscussServiceClient client = DiscussServiceClient.create(settings);
+//
+//
+//
+//  }
+
 
   public static String extractMessage(String jsonResponse) {
     try {

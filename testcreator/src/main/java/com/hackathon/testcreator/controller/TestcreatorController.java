@@ -22,19 +22,18 @@ public class TestcreatorController {
   private TestServiceImpl service;
 
 
-  @PostMapping(value = "/create")
-  public ResponseEntity<String> createTest(
+  @PostMapping(value = "/create/chatgpt")
+  public ResponseEntity<String> createTestChatGpt(
       @RequestParam String language,
       @RequestParam String version,
       @RequestParam String apiKey,
       @RequestParam String seniority) {
     if(!language.isEmpty() && !version.isEmpty() && !apiKey.isEmpty() && !seniority.isEmpty()) {
       LOGGER.info("Requesting a test for {} , version {}, seniority {} ",language,version, seniority);
-      String response = service.getTest(language, version, apiKey, seniority);
+      String response = service.getChatGPT(language, version, apiKey, seniority);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     LOGGER.info("Something went wrong");
     return new ResponseEntity<>("bad request", HttpStatus.BAD_REQUEST);
   }
-
 }
