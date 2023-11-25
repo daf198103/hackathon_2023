@@ -23,10 +23,13 @@ public class TestcreatorController {
 
 
   @PostMapping(value = "/create")
-  public ResponseEntity<String> createTest(@RequestParam String language, @RequestParam String version) {
+  public ResponseEntity<String> createTest(
+      @RequestParam String language,
+      @RequestParam String version,
+      @RequestParam String apiKey) {
     if(!language.isEmpty() && !version.isEmpty()) {
       LOGGER.info("Requesting a test for {} , version {}",language,version);
-      String response = service.getTest(language, version);
+      String response = service.getTest(language, version, apiKey);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     LOGGER.info("Something went wrong");

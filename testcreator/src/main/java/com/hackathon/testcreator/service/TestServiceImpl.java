@@ -1,5 +1,7 @@
 package com.hackathon.testcreator.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -14,9 +16,9 @@ import org.springframework.stereotype.Service;
 public class TestServiceImpl implements TestService{
 
   @Override
-  public String getTest(String language, String version) {
+  public String getTest(String language, String version, String apiKey_) {
       String url = "https://api.openai.com/v1/chat/completions";
-      String apiKey = "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";
+      String apiKey = apiKey_;
       String model = "gpt-3.5-turbo";
 
       String message = "create me only one senior code challenge algorithm in "
@@ -53,6 +55,23 @@ public class TestServiceImpl implements TestService{
         throw new RuntimeException(e);
       }
 
-    return response.toString();
+    return extractContent(response.toString());
+  }
+
+  public static String extractContent(String jsonResponse) {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      JsonNode rootNode = objectMapper.readTree(jsonResponse);
+
+      JsonNode contentNode = rootNode
+          .path("choices")
+          .path(0)  // Assuming there is always at least one choice
+          .path("message")
+          .path("content");
+
+      return contentNode.isMissingNode() ? "" : contentNode.toString();
+    } catch (Exception e) {
+      throw new RuntimeException("Error parsing JSON response", e);
+    }
   }
 }
