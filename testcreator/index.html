@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" />
+    <title>Index</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<style>
+    body {
+        background-color: rgb(38, 35, 39);
+        color: rgb(158, 158, 158);
+        font-family: 'Lato', sans-serif;
+        margin: 0 auto;
+    }
+    h1 {
+        font-size: 3em;
+    }
+    #main-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding-top: 3%;
+    }
+    .form-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    input {
+        border: 0;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background-color: #fff; 
+    }
+
+    #namePlaceholder, #languagePlaceholder {
+        color: #00ff93;
+    }
+
+    input:focus-visible {
+        border: 0;
+        outline: 0;
+    }
+    label {
+        position: absolute;
+        top: 10px; 
+        left: 10px;
+        padding: 0 5px;
+        font-size: 16px;
+        color: #555;
+        pointer-events: none;
+        transition: transform 0.3s, font-size 0.3s;
+        background-color: #fff; 
+    }
+
+    label.language-label {
+        top: 70px;
+    }
+    #language {
+        margin-top: 20px;
+    }
+
+    input:focus {
+        border-color: #00ff93;
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+
+    input:focus + label {
+        transform: translateY(-19px);
+        font-size: 14px;
+        color: #00ff93;
+        background: rgb(38, 35, 39);
+        border: 1px solid rgb(158, 158, 158);
+        border-radius: 20px;
+    }
+
+    .btn {
+        cursor: pointer;
+        background-color: #00ff93;
+        color: #000;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    #greeting {
+        display: none;
+        margin-top: 20px;
+        font-size: 1.2em;
+        text-align: center;
+    }
+
+    .ready {
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.5em;
+        margin-top: 20px;
+    }
+    #seniority {
+        margin-top: 20px;
+    }
+    .seniority {
+        top: 130px;
+    }
+    #version {
+        margin-top: 20px;
+    }
+    .version {
+        top: 192px;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    input {
+        width: 230px;
+    }
+    input:not(:placeholder-shown) + label {
+        display: none;
+    }
+
+</style>
+<body>
+    <div id="main-content">
+        <h1>Welcome to Test Generator</h1>
+
+        <div class="form-group">
+            <input type="text" id="username" oninput="updateGreeting()" placeholder="What's your name" required>
+            <label for="username">What's your name?</label>
+
+            <input type="text" id="language" placeholder="Choose your language" required>
+            <label class="language-label" for="language">Choose your language</label>
+            
+            <input type="text" id="seniority" placeholder="Choose your seniority" required>
+            <label class="seniority" for="seniority">Choose your seniority</label>
+            
+            <input type="text" id="version" placeholder="Choose the language version" required>
+            <label class="version" for="version">Choose the language version</label>
+            
+            <input type="text" id="idiom" placeholder="Choose the idiom" required>
+            <label class="idiom" for="idiom">Choose the idiom</label>
+        </div>
+
+        <p id="greeting">Hello, <span id="namePlaceholder"></span>! 
+            <span class="ready">Are you ready for the coding test?</span>
+        </p>
+
+        <div class="buttons">
+            <a id="linkToTest1" class="btn" onclick="constructURL(); navigateToNextPage()">Let's go</a>
+        </div>
+
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Event listener for the username input
+            $('#username').on('input', updateGreeting);
+        });
+
+        function updateGreeting() {
+            const namePlaceholder = $('#namePlaceholder');
+            const greetingDiv = $('#greeting');
+            const enteredName = $('#username').val().trim();
+            const linkToTest1 = $('#linkToTest1');
+
+            namePlaceholder.text(enteredName || '{name}');
+
+            // Show the greeting div if there is input
+            greetingDiv.css('display', enteredName ? 'block' : 'none');
+
+            // Update the link href dynamically
+            linkToTest1.attr('href', enteredName ? 'test1.html' : '#');
+
+            sessionStorage.setItem('enteredName', enteredName);
+        }
+
+        
+        function constructURL() {
+            var baseUrl = "http://localhost:8080/api/v1/create/chatgpt";
+            var apiKey = "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";
+
+            // Get typed inputs:
+            var seniority = $('#seniority').val();
+            var language = $("#language").val();
+            var version = $("#version").val();
+            var idiom = $("#idiom").val();
+            
+            // Encode parameters to handle special characters
+            var encodedLanguage = encodeURIComponent(language);
+            var encodedSeniority = encodeURIComponent(seniority);
+            var encodedApiKey = encodeURIComponent(apiKey);
+            var encodedIdiom = encodeURIComponent(idiom);
+            
+            // Construct the URL with query parameters
+            var fullUrl = `${baseUrl}?language=${encodedLanguage}&version=${version}&apiKey=${encodedApiKey}&seniority=${encodedSeniority}&idiom=${encodedIdiom}`;
+            
+            // Print or use the full URL
+            console.log(fullUrl);
+            
+            // Make an AJAX request
+            $.ajax({
+                url: fullUrl,
+                method: "POST",
+                success: function(response) {
+                    // Display the selected values on the screen
+                    $("#result").text(`Selected Language: ${language}`);
+                },
+                error: function(error) {
+                    console.error("Error:", error);
+                }
+            });
+
+            function navigateToNextPage() {
+                const enteredName = $('#username').val().trim();
+    
+                if (enteredName !== '') {   // Check if a name is entered
+                    sessionStorage.setItem('enteredName', enteredName);  // Store the entered name in sessionStorage
+                    window.location.href = 'test1.html';                  // Navigate to the next page
+                } else {
+                    alert('Please enter your name before proceeding.');
+                }
+            }
+
+        }
+    </script>
+
+</body>
+</html>

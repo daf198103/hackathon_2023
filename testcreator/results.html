@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" />
+    <title>Results</title>
+</head>
+
+<style>
+    body {
+        background-color: rgb(38, 35, 39);
+        color: rgb(158, 158, 158);
+        font-family: 'Lato', sans-serif;
+        margin: 0 auto;
+    }
+    #main-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding-top: 3%;
+    }
+    .form-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    input {
+        border: 0;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background-color: #fff; /* Set background color to white */
+    }
+
+    input:focus-visible {
+        border: 0;
+        outline: 0;
+    }
+    label {
+        position: absolute;
+        top: 10px; /* Adjust the top position to leave some space */
+        left: 10px;
+        padding: 0 5px; /* Adjust padding for better readability */
+        font-size: 16px;
+        color: #555;
+        pointer-events: none;
+        transition: transform 0.3s, font-size 0.3s;
+        background-color: #fff; /* Set background color to white */
+    }
+
+    input:focus {
+        border-color: #00ff93;
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+
+    input:focus + label {
+        transform: translateY(-20px);
+        font-size: 14px;
+        color: #00ff93;
+        background: rgb(38, 35, 39);
+        border: 1px solid rgb(158, 158, 158);
+        border-radius: 20px;
+    }
+    .btn {
+        cursor: pointer;
+        background-color: #00ff93;
+        color: #000;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        text-decoration: none;
+        margin-right: 20px;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+    #greeting {
+        display: none;
+        margin-top: 20px;
+    }
+
+    #content {
+        text-align: center;
+    }
+
+    #message {
+        font-size: 34px;
+        margin: 0;
+        margin-bottom: 30px;
+    }
+
+    #nameDisplay {
+        font-size: 36px;
+        font-weight: bold;
+        color: #00ff93;
+        margin-bottom: 20px;
+    }
+
+    #coding {
+        margin-bottom: 20px;
+        color: #fff;
+        font-size: 15px;
+        background: #000;
+        padding: 15px;
+    }
+
+</style>
+<body>
+    <div id="main-content">
+        <h2 id="message">Results</h2>
+
+        <div id="nameDisplay"></div>
+
+        <!-- <button class="btn" onclick="goBack()">Go Back</button> -->
+        <div>
+            <button class="btn" onclick="sendEmail()">Send to email</button>
+        </div>
+
+        
+        
+    </div>
+
+    <script>
+        function sendEmail() {
+            // enviar teste por email
+        }
+        //Retrieve the entered name from sessionStorage
+        const enteredName = sessionStorage.getItem('enteredName');
+
+        if (enteredName) {
+            document.getElementById('nameDisplay').textContent = `${enteredName}, your score was: X`;
+        } else {
+            document.getElementById('message').textContent = 'No name entered!';  // Handle the case where there is no entered name
+        }
+</script>
+
+</body>
+</html>
