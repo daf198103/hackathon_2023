@@ -18,17 +18,24 @@ import org.springframework.stereotype.Service;
 public class TestServiceImpl implements TestService{
 
   @Override
-  public String getChatGPT(String language, String version, String apiKey_, String seniority) {
+  public String getChatGPT(String language, String version, String apiKey_, String seniority, String idiom) {
       String url = "https://api.openai.com/v1/chat/completions";
       String apiKey = apiKey_;
       String model = "gpt-3.5-turbo";
 
       String message = "create me only one " + seniority +" code challenge algorithm in "
           + language + " " + version
-          + " with a story prompt of 50 words contextualizing the test and 80% parts "
-          + " in blank to be filled by the user and without the main "
-          + " and separate the story the code challenge  and the instructions"
-          + " into distinct paragraphs in the response";
+          + " with a story prompt of 50 words contextualizing the test with only the"
+          + " method signature to be implemented by the candidate."
+          + " Separate the story, the code challenge  and the instructions"
+          + " into distinct paragraphs and give one response example.";
+
+      String mensagem = "crie me somente 1 teste de algoritmo nível " + seniority
+          + " em " + language + "na versão" + version + "com um enunciado de 50 palavras "
+          + " contextualizando o teste e com apenas a assinatura do método que deverá ser"
+          + " implementado  pelo candidato.  Separe o teste e as instruções em parágrafos"
+          + " distintos e de um exemplo da saída desejada.";
+
 
       StringBuffer response = new StringBuffer();
 
@@ -39,8 +46,16 @@ public class TestServiceImpl implements TestService{
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization", "Bearer " + apiKey);
         con.setRequestProperty("Content-Type", "application/json");
-
-        String body = "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \"" + message + "\"}]}";
+        String body;
+        if(idiom.isBlank() || idiom == null) {
+           body =
+              "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \""
+                  + message + "\"}]}";
+        } else {
+          body =
+              "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \""
+                  + mensagem + "\"}]}";
+        }
         con.setDoOutput(true);
         OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
         writer.write(body);
@@ -59,7 +74,7 @@ public class TestServiceImpl implements TestService{
         throw new RuntimeException(e);
       }
 
-    return extractMessage(response.toString());
+    return formatStory(extractMessage(response.toString()));
   }
 
   @Override
@@ -113,12 +128,21 @@ public class TestServiceImpl implements TestService{
 
       JsonNode messageNode = rootNode
           .path("choices")
-          .path(0)  // Assuming there is always at least one choice
+          .path(0)
           .path("message");
 
       return messageNode.isMissingNode() ? "" : messageNode.toString();
     } catch (Exception e) {
       throw new RuntimeException("Error parsing JSON response", e);
     }
+  }
+
+  public static String formatStory(String input) {
+    String formattedText = input.replaceAll("\n", " ")
+        .replaceAll("\\s+", " ")
+        .replaceAll("\n```", " ")
+        .replaceAll("\"", " ");
+
+    return formattedText.trim();
   }
 }
