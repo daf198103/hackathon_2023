@@ -11,16 +11,19 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class TestServiceImpl implements TestService{
 
+  @Value("${app.api_key}")
+  private String apiKey_;
+
   @Override
-  public String getChatGPT(String language, String version, String apiKey_, String seniority, String idiom) {
+  public String getChatGPT(String language, String version, String seniority, String idiom) {
       String url = "https://api.openai.com/v1/chat/completions";
-      String apiKey = apiKey_;
       String model = "gpt-3.5-turbo";
 
       String message = "create me only one " + seniority +" code challenge algorithm in "
@@ -44,7 +47,7 @@ public class TestServiceImpl implements TestService{
         URL url_ = new URL(url);
         HttpURLConnection con = (HttpURLConnection) url_.openConnection();
         con.setRequestMethod("POST");
-        con.setRequestProperty("Authorization", "Bearer " + apiKey);
+        con.setRequestProperty("Authorization", "Bearer " + apiKey_);
         con.setRequestProperty("Content-Type", "application/json");
         String body;
         if(idiom.isBlank() || idiom == null) {
@@ -78,10 +81,9 @@ public class TestServiceImpl implements TestService{
   }
 
   @Override
-  public String evaluateResolution(String resolution, String apiKey_)
+  public String evaluateResolution(String resolution)
       throws JsonProcessingException {
     String url = "https://api.openai.com/v1/chat/completions";
-    String apiKey = apiKey_;
     String model = "gpt-3.5-turbo";
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -97,7 +99,7 @@ public class TestServiceImpl implements TestService{
       URL url_ = new URL(url);
       HttpURLConnection con = (HttpURLConnection) url_.openConnection();
       con.setRequestMethod("POST");
-      con.setRequestProperty("Authorization", "Bearer " + apiKey);
+      con.setRequestProperty("Authorization", "Bearer " + apiKey_);
       con.setRequestProperty("Content-Type", "application/json");
       con.setDoOutput(true);
       OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());

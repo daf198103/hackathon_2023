@@ -27,12 +27,11 @@ public class TestcreatorController {
   public ResponseEntity<String> createTestChatGpt(
       @RequestParam String language,
       @RequestParam String version,
-      @RequestParam String apiKey,
       @RequestParam String seniority,
       @RequestParam String idiom) {
-    if(!language.isEmpty() && !version.isEmpty() && !apiKey.isEmpty() && !seniority.isEmpty()) {
+    if(!language.isEmpty() && !version.isEmpty() && !seniority.isEmpty()) {
       LOGGER.info("Requesting a test for {} , version {}, seniority {} ",language,version, seniority);
-      String response = service.getChatGPT(language, version, apiKey, seniority, idiom);
+      String response = service.getChatGPT(language, version, seniority, idiom);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     LOGGER.info("Something went wrong");
@@ -46,7 +45,7 @@ public class TestcreatorController {
   ) throws JsonProcessingException {
     if(!resolution.isEmpty()) {
       LOGGER.info("Evaluating the Test");
-      String response = service.evaluateResolution(resolution, apiKey);
+      String response = service.evaluateResolution(resolution);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     LOGGER.info("Something went wrong");
