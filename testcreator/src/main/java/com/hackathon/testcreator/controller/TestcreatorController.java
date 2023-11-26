@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+* Controller created to callChatGPT
+* to create a code challenge '/create/chatgpt'*
+* and also to evaluate the proposed resolution
+* of the candidate '/evaluate'* *
+* * */
+
 @RestController
 @RequestMapping(value = "api/v1")
 public class TestcreatorController {

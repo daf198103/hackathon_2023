@@ -21,6 +21,12 @@ public class TestServiceImpl implements TestService{
   @Value("${app.api_key}")
   private String apiKey_;
 
+
+  /*
+  * Method that calls chatGPT
+  * and returns the response
+  * formatted to the controller
+  * * */
   @Override
   public String getChatGPT(String language, String version, String seniority, String idiom) {
       String url = "https://api.openai.com/v1/chat/completions";
@@ -80,6 +86,12 @@ public class TestServiceImpl implements TestService{
     return formatStory(extractMessage(response.toString()));
   }
 
+  /*
+  * Method that evaluates the resolution
+  * proposed by the candidate sending
+  * it to chatGPT and waiting for the
+  * response
+  * * * * * */
   @Override
   public String evaluateResolution(String resolution)
       throws JsonProcessingException {
@@ -122,7 +134,10 @@ public class TestServiceImpl implements TestService{
     return extractMessage(response.toString());
   }
 
-
+  /*
+  * Method that extract the message from
+  * the returned JSON
+  * * * */
   public static String extractMessage(String jsonResponse) {
     try {
       ObjectMapper objectMapper = new ObjectMapper();
@@ -139,6 +154,10 @@ public class TestServiceImpl implements TestService{
     }
   }
 
+  /*
+  * Method the formats the response
+  * in a beautiful way to the front
+  * * * */
   public static String formatStory(String input) {
     String formattedText = input.replaceAll("\n", " ")
         .replaceAll("\\s+", " ")
