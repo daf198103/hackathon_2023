@@ -13,11 +13,12 @@ chatGPT to evaluate the proposed solution.
 
 - apikeys -
 
-Para gerar as apikeys caso tenha expirado a atual acesse
+Para gerar as apikeys caso tenha expirado e de erro 401 , acesse a url.
 https://platform.openai.com/ 
 
-Acesse com a COnta google 
+Acesse com a conta google 
 email : hackaton31@gmail.com
 senha Q1W2E3R4T5Y6
 
-vá em apikeys.
+vá em apikeys, crie uma apikey nova e anote
+troque em app.api_key no arquivo application.properties
