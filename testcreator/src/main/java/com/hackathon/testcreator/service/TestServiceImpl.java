@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestServiceImpl implements TestService{
 
-  @Value("${app.api_key}")
+  @Value("${api_key}")
   private String apiKey_;
 
 
@@ -83,7 +83,7 @@ public class TestServiceImpl implements TestService{
         throw new RuntimeException(e);
       }
 
-    return formatStory(extractMessage(response.toString()));
+    return extractMessage(response.toString());
   }
 
   /*

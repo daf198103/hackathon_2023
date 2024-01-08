@@ -3,6 +3,7 @@ package com.hackathon.testcreator.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hackathon.testcreator.model.TestResponse;
 import com.hackathon.testcreator.service.TestServiceImpl;
+import com.hackathon.testcreator.utils.JsonFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,9 @@ public class TestcreatorController {
     if(!language.isEmpty() && !version.isEmpty() && !seniority.isEmpty()) {
       LOGGER.info("Requesting a test for {} , version {}, seniority {} ",language,version, seniority);
       String response = service.getChatGPT(language, version, seniority, idiom);
-      return new ResponseEntity<>(response, HttpStatus.CREATED);
+      JsonFormatter jsonFormatter = new JsonFormatter();
+      String responseBody = jsonFormatter.format(response);
+      return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
     LOGGER.info("Something went wrong");
     return new ResponseEntity<>("bad request", HttpStatus.BAD_REQUEST);
